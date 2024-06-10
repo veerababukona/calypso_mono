@@ -11,82 +11,59 @@ on:
 jobs:
   app:
     runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, 'app')
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Determine changes
-        id: changes
-        run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changes.txt
-          cat changes.txt
-
-      - name: Set has_changes flag for app
-        id: app_changes
-        run: |
-          if grep -q '^app/' changes.txt; then echo "::set-output name=has_changes::true"; else echo "::set-output name=has_changes::false"; fi
+        uses: actions/checkout@v4
+        with:
+          path: app
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
-        if: steps.app_changes.outputs.has_changes == 'true'
+          node-version: '20'
 
       - name: Install dependencies
         run: |
           cd app
           npm install
-        if: steps.app_changes.outputs.has_changes == 'true'
 
       - name: Lint code
         run: |
           cd app
           npm run lint
-        if: steps.app_changes.outputs.has_changes == 'true'
 
       - name: Run tests
         run: |
           cd app
           npm test
-        if: steps.app_changes.outputs.has_changes == 'true'
 
   bff:
     runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, 'bff')
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Determine changes
-        id: changes
-        run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changes.txt
-          cat changes.txt
-
-      - name: Set has_changes flag for bff
-        id: bff_changes
-        run: |
-          if grep -q '^bff/' changes.txt; then echo "::set-output name=has_changes::true"; else echo "::set-output name=has_changes::false"; fi
+        uses: actions/checkout@v4
+        with:
+          path: bff
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
-        if: steps.bff_changes.outputs.has_changes == 'true'
+          node-version: '20'
 
       - name: Install dependencies
         run: |
           cd bff
           npm install
-        if: steps.bff_changes.outputs.has_changes == 'true'
 
       - name: Lint code
         run: |
           cd bff
           npm run lint
-        if: steps.bff_changes.outputs.has_changes == 'true'
 
       - name: Run tests
         run: |
           cd bff
           npm test
-        if: steps.bff_changes.outputs.has_changes == 'true'
+
