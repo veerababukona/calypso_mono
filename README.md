@@ -64,24 +64,3 @@ $ npm install
 $ npm run test
 $ npm run build
 ```
-
-### Contributor(s)
-
-[Victor Okeugo](https://angel.co/u/victorokeugo/)
-
-- Github: [@johnsonsirv](https://github.com/johnsonsirv)
-- Twitter: [@vokeugo](https://twitter.com/@vokeugo/)
-- Email: [okeugo.victor.c@gmail.com]()
-
-## How to contribute
-1. Fork it (https://github.com/johnsonsirv/todo-list/fork)
-2. Create your feature branch (git checkout -b feature/[choose-a-name])
-3. Commit your changes (git commit -m 'What this commit will fix/add')
-4. Push to the branch (git push origin feature/[chosen name])
-5. Create a new Pull Request
-> You can also create [issues](https://github.com/johnsonsirv/todo-list/issues)
-
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE.md) file for details.
