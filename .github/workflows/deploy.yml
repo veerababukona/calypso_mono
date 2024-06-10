@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, 'app')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          path: app
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: |
+          cd app
+          npm install
+
+      - name: Lint code
+        run: |
+          cd app
+          npm run lint
+
+      - name: Run tests
+        run: |
+          cd app
+          npm test
+
+  bff:
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, 'bff')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          path: bff
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: |
+          cd bff
+          npm install
+
+      - name: Lint code
+        run: |
+          cd bff
+          npm run lint
+
+      - name: Run tests
+        run: |
+          cd bff
+          npm test
+
