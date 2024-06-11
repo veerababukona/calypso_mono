@@ -10,7 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
+
+      - name: Fetch all history
+        run: git fetch --all
 
       - name: Determine changes
         id: changes
