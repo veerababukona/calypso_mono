@@ -4,14 +4,18 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '**'  # Trigger on any changes in the monorepo
   pull_request:
     branches:
       - main
+    paths:
+      - '**'  # Trigger on any changes in the monorepo
 
 jobs:
   app:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.event.commits && contains(join(github.event.commits.*.modified, ','), 'app/')
+    if: ${{ contains(github.event.commits.*.modified, 'app/') || contains(github.event.commits.*.modified, 'bff/') || contains(github.event.commits.*.added, 'app/') || contains(github.event.commits.*.added, 'bff/') || contains(github.event.commits.*.removed, 'app/') || contains(github.event.commits.*.removed, 'bff/') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -23,7 +27,7 @@ jobs:
 
   bff:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.event.commits && contains(join(github.event.commits.*.modified, ','), 'bff/')
+    if: ${{ contains(github.event.commits.*.modified, 'bff/') || contains(github.event.commits.*.modified, 'app/') || contains(github.event.commits.*.added, 'bff/') || contains(github.event.commits.*.added, 'app/') || contains(github.event.commits.*.removed, 'bff/') || contains(github.event.commits.*.removed, 'app/') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
