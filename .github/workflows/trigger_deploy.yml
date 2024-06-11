@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - main
+      - *
 
 jobs:
   decide_and_deploy:
@@ -17,7 +18,16 @@ jobs:
       - name: Determine changes
         id: changes
         run: |
-          CHANGED_FILES="bff/index.js"
+          # Fetch the latest commits to ensure we can compare
+          git fetch origin
+
+          # Determine the base commit for the comparison
+          BASE_COMMIT=$(git merge-base origin/main HEAD)
+
+          # Get the changed files between the base commit and the current commit
+          CHANGED_FILES=$(git diff --name-only $BASE_COMMIT HEAD)
+
+          # Output the changed files
           echo "Changed Files: $CHANGED_FILES"
           echo "::set-output name=changed_files::$CHANGED_FILES"
 
