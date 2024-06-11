@@ -13,7 +13,11 @@ jobs:
   checkout:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Calypso repository
+        run: |
+          git clone https://github.com/${{ github.repository_owner }}/${{ github.repository }}.git Calypso
+          cd Calypso
+        # Add error handling for git clone failures (optional)
 
   # App pipeline - runs for changes in app or entire Calypso repo
   app:
