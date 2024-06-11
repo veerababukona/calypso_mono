@@ -15,19 +15,20 @@ jobs:
         with:
           fetch-depth: 0 # Ensure full history is fetched
 
+      - name: Fetch all history
+        run: git fetch --all
+
+      - name: Determine base commit
+        id: base_commit
+        run: |
+          BASE_COMMIT=$(git merge-base origin/main HEAD)
+          echo "BASE_COMMIT=$BASE_COMMIT" >> $GITHUB_ENV
+          echo "Base Commit: $BASE_COMMIT"
+
       - name: Determine changes
         id: changes
         run: |
-          # Fetch the latest commits to ensure we can compare
-          git fetch origin
-
-          # Determine the base commit for the comparison
-          BASE_COMMIT=$(git merge-base origin/main HEAD)
-          
-          # Get the changed files between the base commit and the current commit
           CHANGED_FILES=$(git diff --name-only $BASE_COMMIT HEAD)
-          
-          # Output the changed files
           echo "Changed Files: $CHANGED_FILES"
           echo "::set-output name=changed_files::$CHANGED_FILES"
 
