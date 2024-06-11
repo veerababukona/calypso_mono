@@ -29,7 +29,7 @@ jobs:
 
       - name: Trigger app deployment
         if: ${{ contains(steps.changes.outputs.changed_files, 'app/') || startsWith(steps.changes.outputs.changed_files, 'app/') }}
-        uses: ./deploy/app_deploy.yml
+        uses: ./.github/workflows/deploy/app_deploy.yml
 
       - name: Trigger bff deployment
         if: ${{ contains(steps.changes.outputs.changed_files, 'bff/') || startsWith(steps.changes.outputs.changed_files, 'bff/') }}
