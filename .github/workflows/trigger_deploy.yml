@@ -17,7 +17,7 @@ jobs:
       - name: Determine changes
         id: changes
         run: |
-          CHANGED_FILES=$(git diff --name-only HEAD~ HEAD@{u})
+          CHANGED_FILES="app"
           echo "Changed Files: $CHANGED_FILES"
           echo "::set-output name=changed_files::$CHANGED_FILES"
 
