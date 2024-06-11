@@ -35,4 +35,4 @@ jobs:
 
       - name: Trigger bff deployment
         if: ${{ contains(steps.changes.outputs.changed_files, 'bff/') || startsWith(steps.changes.outputs.changed_files, 'bff/') }}
-        uses: ./.github/workflows/deploy/action.yml
+        uses: ./.github/workflows/deploy/bff_deploy.yml

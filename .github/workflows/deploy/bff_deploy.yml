@@ -1,4 +1,4 @@
-name: App Deploy
+name: BFF Deploy
 
 on:
   workflow_call:
@@ -12,5 +12,5 @@ jobs:
         uses: actions/checkout@v2
 
       # Add your deployment steps here
-      - name: Deploy App
-        run: echo "Deploying App..."
+      - name: Deploy BFF
+        run: echo "Deploying BFF..."
