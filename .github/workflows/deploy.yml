@@ -4,20 +4,14 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'app/**'
-      - 'bff/**'
   pull_request:
     branches:
       - main
-    paths:
-      - 'app/**'
-      - 'bff/**'
 
 jobs:
   app:
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.message, 'app') || (github.event_name == 'push' && github.event.commits | contains('app/**'))
+    if: github.event_name == 'push' && github.event.commits && contains(join(github.event.commits.*.modified, ','), 'app/')
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -29,7 +23,7 @@ jobs:
 
   bff:
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.message, 'bff') || (github.event_name == 'push' && github.event.commits | contains('bff/**'))
+    if: github.event_name == 'push' && github.event.commits && contains(join(github.event.commits.*.modified, ','), 'bff/')
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
