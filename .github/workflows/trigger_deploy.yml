@@ -26,9 +26,6 @@ jobs:
           echo "Changed files output: ${{ steps.changes.outputs.changed_files }}"
           echo "App folder changed: ${{ contains(steps.changes.outputs.changed_files, 'app/') }}"
           echo "BFF folder changed: ${{ contains(steps.changes.outputs.changed_files, 'bff/') }}"
-          echo "Listing files in .github/workflows/deploy:"
-          ls -l ./deploy
-          ls -l ../../.github/workflows/deploy
 
       - name: Trigger app deployment
         if: ${{ contains(steps.changes.outputs.changed_files, 'app/') || startsWith(steps.changes.outputs.changed_files, 'app/') }}
