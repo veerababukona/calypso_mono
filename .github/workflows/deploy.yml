@@ -9,47 +9,40 @@ on:
       - main
 
 jobs:
-  detect-changes:
-    runs-on: ubuntu-latest
-    outputs:
-      app-changed: ${{ steps.check.outputs.app_changed }}
-      bff-changed: ${{ steps.check.outputs.bff_changed }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Check for changes in app
-        id: check
-        run: |
-          APP_CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^app/')
-          BFF_CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^bff/')
-          echo "app_changed=${APP_CHANGED}" >> $GITHUB_ENV
-          echo "bff_changed=${BFF_CHANGED}" >> $GITHUB_ENV
-          echo "::set-output name=app_changed::${APP_CHANGED}"
-          echo "::set-output name=bff_changed::${BFF_CHANGED}"
-
   app:
-    needs: detect-changes
     runs-on: ubuntu-latest
-    if: needs.detect-changes.outputs.app-changed != ''
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          path: app
 
-      - name: Print directory
-        run: echo "Changes detected in app directory"
+      - name: Check for changes in app directory
+        id: check_app
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^app/'; then
+            echo "changes_in_app=true" >> $GITHUB_ENV
+          else
+            echo "changes_in_app=false" >> $GITHUB_ENV
+          fi
+
+      - name: Run app pipeline
+        if: env.changes_in_app == 'true'
+        run: echo "Running app pipeline due to changes in app directory"
 
   bff:
-    needs: detect-changes
     runs-on: ubuntu-latest
-    if: needs.detect-changes.outputs.bff-changed != ''
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          path: bff
 
-      - name: Print directory
-        run: echo "Changes detected in bff directory"
+      - name: Check for changes in bff directory
+        id: check_bff
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^bff/'; then
+            echo "changes_in_bff=true" >> $GITHUB_ENV
+          else
+            echo "changes_in_bff=false" >> $GITHUB_ENV
+          fi
+
+      - name: Run bff pipeline
+        if: env.changes_in_bff == 'true'
+        run: echo "Running bff pipeline due to changes in bff directory"
