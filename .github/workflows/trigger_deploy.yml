@@ -17,7 +17,7 @@ jobs:
       - name: Determine changes
         id: changes
         run: |
-          CHANGED_FILES="app/index.js"
+          CHANGED_FILES="bff/index.js"
           echo "Changed Files: $CHANGED_FILES"
           echo "::set-output name=changed_files::$CHANGED_FILES"
 
@@ -26,11 +26,16 @@ jobs:
           echo "Changed files output: ${{ steps.changes.outputs.changed_files }}"
           echo "App folder changed: ${{ contains(steps.changes.outputs.changed_files, 'app/') }}"
           echo "BFF folder changed: ${{ contains(steps.changes.outputs.changed_files, 'bff/') }}"
+          echo "final output if: ${{ contains(steps.changes.outputs.changed_files, 'app/') || startsWith(steps.changes.outputs.changed_files, 'app/') }}"
 
       - name: Trigger app deployment
         if: ${{ contains(steps.changes.outputs.changed_files, 'app/') || startsWith(steps.changes.outputs.changed_files, 'app/') }}
-        uses: ./.github/workflows/deploy/app_deploy.yml
+        run: |
+          echo "Listing files in .github/workflows/deploy:"
+          ls -l ./deploy
+          ls -l ../../.github/workflows/deploy
+        uses: ../../.github/workflows/deploy/app_deploy.yml
 
       - name: Trigger bff deployment
         if: ${{ contains(steps.changes.outputs.changed_files, 'bff/') || startsWith(steps.changes.outputs.changed_files, 'bff/') }}
-        uses: ./deploy/bff_deploy.yml
+        uses: ../../.github/workflows/deploy/bff_deploy.yml
