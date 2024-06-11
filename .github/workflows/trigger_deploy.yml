@@ -17,7 +17,7 @@ jobs:
       - name: Determine changes
         id: changes
         run: |
-          CHANGED_FILES=$(git diff --name-only origin/main ${{ github.sha }})
+          CHANGED_FILES=$(git diff --name-only HEAD~ HEAD)
           echo "Changed Files: $CHANGED_FILES"
           echo "::set-output name=changed_files::$CHANGED_FILES"
 
