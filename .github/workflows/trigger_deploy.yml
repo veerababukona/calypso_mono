@@ -18,7 +18,14 @@ jobs:
         id: changes
         run: |
           CHANGED_FILES=$(git diff --name-only origin/main ${{ github.sha }})
+          echo "Changed Files: $CHANGED_FILES"
           echo "::set-output name=changed_files::$CHANGED_FILES"
+
+      - name: Debug output
+        run: |
+          echo "Changed files output: ${{ steps.changes.outputs.changed_files }}"
+          echo "App folder changed: ${{ contains(steps.changes.outputs.changed_files, 'app/') }}"
+          echo "BFF folder changed: ${{ contains(steps.changes.outputs.changed_files, 'bff/') }}"
 
       - name: Trigger app deployment
         if: ${{ contains(steps.changes.outputs.changed_files, 'app/') }}
