@@ -20,7 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: checkout
     steps:
-      - uses: ./checkout-app.sh@v1  # Custom script to checkout app directory only
       - name: Check for changes in app or Calypso
         id: check_app
         run: |
@@ -39,7 +38,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: checkout
     steps:
-      - uses: ./checkout-bff.sh@v1  # Custom script to checkout bff directory only
       - name: Check for changes in bff or Calypso
         id: check_bff
         run: |
