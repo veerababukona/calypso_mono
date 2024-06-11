@@ -17,7 +17,7 @@ jobs:
       - name: Determine changes
         id: changes
         run: |
-          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          CHANGED_FILES=$(git diff --name-only origin/main ${{ github.sha }})
           echo "::set-output name=changed_files::$CHANGED_FILES"
 
       - name: Trigger app deployment
