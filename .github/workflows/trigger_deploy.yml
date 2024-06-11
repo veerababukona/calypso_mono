@@ -3,8 +3,7 @@ name: Trigger Deploy
 on:
   push:
     branches:
-      - main
-      - 'feature/*' # Adjust this to include other branches if necessary
+      - '**'
 
 jobs:
   decide_and_deploy:
@@ -28,7 +27,7 @@ jobs:
       - name: Determine changes
         id: changes
         run: |
-          CHANGED_FILES=$(git diff --name-only $BASE_COMMIT HEAD)
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
           echo "Changed Files: $CHANGED_FILES"
           echo "::set-output name=changed_files::$CHANGED_FILES"
 
