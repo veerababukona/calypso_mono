@@ -41,4 +41,6 @@ class Todo {
   }
 }
 
+console.log('i am here');
+
 export default Todo;

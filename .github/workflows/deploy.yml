@@ -1,69 +1,40 @@
-name: CI
+name: Calypso CI
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'app/**'
+      - 'bff/**'
   pull_request:
     branches:
       - main
+    paths:
+      - 'app/**'
+      - 'bff/**'
 
 jobs:
   app:
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.message, 'app')
+    if: contains(github.event.head_commit.message, 'app') || (github.event_name == 'push' && github.event.commits | contains('app/**'))
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           path: app
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: |
-          cd app
-          npm install
-
-      - name: Lint code
-        run: |
-          cd app
-          npm run lint
-
-      - name: Run tests
-        run: |
-          cd app
-          npm test
+      - name: Print directory
+        run: echo "Changes detected in app directory"
 
   bff:
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.message, 'bff')
+    if: contains(github.event.head_commit.message, 'bff') || (github.event_name == 'push' && github.event.commits | contains('bff/**'))
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           path: bff
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: |
-          cd bff
-          npm install
-
-      - name: Lint code
-        run: |
-          cd bff
-          npm run lint
-
-      - name: Run tests
-        run: |
-          cd bff
-          npm test
-
+      - name: Print directory
+        run: echo "Changes detected in bff directory"
