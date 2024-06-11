@@ -1,4 +1,4 @@
-# .github/workflows/deploy/bff_deploy.yml
+# .github/workflows/deploy/action.yml
 
 name: BFF Deployment
 
