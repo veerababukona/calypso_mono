@@ -1,0 +1,29 @@
+# .github/workflows/trigger_deploy.yml
+
+name: Trigger Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  decide_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Determine changes
+        id: changes
+        run: |
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          echo "::set-output name=changed_files::$CHANGED_FILES"
+
+      - name: Trigger app deployment
+        if: ${{ contains(steps.changes.outputs.changed_files, 'app/') }}
+        uses: ./.github/workflows/deploy/app_deploy.yml
+
+      - name: Trigger bff deployment
+        if: ${{ contains(steps.changes.outputs.changed_files, 'bff/') }}
+        uses: ./.github/workflows/deploy/bff_deploy.yml

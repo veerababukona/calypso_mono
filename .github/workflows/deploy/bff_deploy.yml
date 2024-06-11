@@ -1,0 +1,21 @@
+# .github/workflows/deploy/bff_deploy.yml
+
+name: BFF Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_bff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Add your deployment steps for the bff here
+      # Example:
+      # - name: Deploy bff
+      #   run: |
+      #     echo "Deploying bff..."
