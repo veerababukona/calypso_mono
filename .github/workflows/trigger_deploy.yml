@@ -10,34 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0 # Ensure full history is fetched
-
-      - name: Fetch all history
-        run: git fetch --all
-
-      - name: Determine base commit
-        id: base_commit
-        run: |
-          BASE_COMMIT=$(git merge-base origin/main HEAD)
-          echo "BASE_COMMIT=$BASE_COMMIT" >> $GITHUB_ENV
-          echo "Base Commit: $BASE_COMMIT"
+        uses: actions/checkout@v4
 
       - name: Determine changes
         id: changes
         run: |
           CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-          echo "Changed Files: $CHANGED_FILES"
-          echo "::set-output name=changed_files::$CHANGED_FILES"
-
-      - name: Debug output
-        run: |
-          echo "Changed files output: ${{ steps.changes.outputs.changed_files }}"
-          echo "App folder changed: ${{ contains(steps.changes.outputs.changed_files, 'app/') }}"
-          echo "BFF folder changed: ${{ contains(steps.changes.outputs.changed_files, 'bff/') }}"
-          echo "Listing files in .github/workflows/deploy:"
-          ls .github/workflows/deploy
 
       - name: Trigger app deployment
         if: ${{ contains(steps.changes.outputs.changed_files, 'app/') || startsWith(steps.changes.outputs.changed_files, 'app/') }}
