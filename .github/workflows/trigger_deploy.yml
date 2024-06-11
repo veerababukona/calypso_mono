@@ -27,13 +27,12 @@ jobs:
           echo "App folder changed: ${{ contains(steps.changes.outputs.changed_files, 'app/') }}"
           echo "BFF folder changed: ${{ contains(steps.changes.outputs.changed_files, 'bff/') }}"
           echo "final output if: ${{ contains(steps.changes.outputs.changed_files, 'app/') || startsWith(steps.changes.outputs.changed_files, 'app/') }}"
-
-      - name: Trigger app deployment
-        if: ${{ contains(steps.changes.outputs.changed_files, 'app/') || startsWith(steps.changes.outputs.changed_files, 'app/') }}
-        run: |
           echo "Listing files in .github/workflows/deploy:"
           ls -l ./deploy
           ls -l ../../.github/workflows/deploy
+
+      - name: Trigger app deployment
+        if: ${{ contains(steps.changes.outputs.changed_files, 'app/') || startsWith(steps.changes.outputs.changed_files, 'app/') }}
         uses: ../../.github/workflows/deploy/app_deploy.yml
 
       - name: Trigger bff deployment
