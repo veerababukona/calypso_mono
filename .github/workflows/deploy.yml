@@ -5,14 +5,12 @@ on:
     branches:
       - main
     paths:
-      - 'app/**' # Only trigger for changes in the app directory
-      - 'bff/**' # Only trigger for changes in the bff directory
-  pull_request:
-    branches:
-      - main
+      - 'app/**'
+      - 'bff/**'
 
 jobs:
   app:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -32,6 +30,7 @@ jobs:
         run: echo "Running app pipeline due to changes in app directory"
 
   bff:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
