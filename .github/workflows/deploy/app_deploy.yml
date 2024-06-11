@@ -14,8 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Add your deployment steps for the app here
-      # Example:
-      # - name: Deploy app
-      #   run: |
-      #     echo "Deploying app..."
+      - name: Check for changes in app directory
+        id: check_app
+        run: |
+         echo "app pipleine"
