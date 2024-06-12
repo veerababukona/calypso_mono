@@ -24,10 +24,35 @@ jobs:
           echo "Changed Files: $CHANGED_FILES"
           echo "::set-output name=changed_files::$CHANGED_FILES"
 
-      - name: Trigger app deployment
-        if: ${{ contains(steps.changes.outputs.changed_files, 'app/') || startsWith(steps.changes.outputs.changed_files, 'app/') }}
-        uses: ./.github/workflows/deploy/app_deploy.yml
+      - name: Set deployment flags
+        id: set_flags
+        run: |
+          CHANGED_FILES="${{ steps.changes.outputs.changed_files }}"
+          if echo "$CHANGED_FILES" | grep -q '^app/'; then
+            echo "deploy_app=true" >> $GITHUB_ENV
+          else
+            echo "deploy_app=false" >> $GITHUB_ENV
+          fi
+          if echo "$CHANGED_FILES" | grep -q '^bff/'; then
+            echo "deploy_bff=true" >> $GITHUB_ENV
+          else
+            echo "deploy_bff=false" >> $GITHUB_ENV
+          fi
 
-      - name: Trigger bff deployment
-        if: ${{ contains(steps.changes.outputs.changed_files, 'bff/') || startsWith(steps.changes.outputs.changed_files, 'bff/') }}
-        uses: ./.github/workflows/deploy/bff_deploy.yml
+      - name: Trigger App Deploy
+        if: env.deploy_app == 'true' || (env.deploy_app == 'false' && env.deploy_bff == 'false')
+        run: |
+          curl -X POST \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/actions/workflows/app_deploy.yml/dispatches \
+          -d '{"ref":"main"}'
+
+      - name: Trigger BFF Deploy
+        if: env.deploy_bff == 'true' || (env.deploy_app == 'false' && env.deploy_bff == 'false')
+        run: |
+          curl -X POST \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/actions/workflows/bff_deploy.yml/dispatches \
+          -d '{"ref":"main"}'
