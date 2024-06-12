@@ -1,4 +1,4 @@
-name: Trigger Deploy
+name: Calypso CI Deploy
 
 on:
   push:
