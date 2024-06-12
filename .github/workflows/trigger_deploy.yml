@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - '*'
+      - 'main'
 
 jobs:
   decide_and_deploy:
