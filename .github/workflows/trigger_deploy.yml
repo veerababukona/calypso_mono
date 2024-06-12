@@ -3,7 +3,7 @@ name: Trigger Deploy
 on:
   push:
     branches:
-      - '**'
+      - '*'
 
 jobs:
   decide_and_deploy:
